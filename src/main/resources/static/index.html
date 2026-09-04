@@ -369,6 +369,90 @@
     .modes-grid { grid-template-columns: 1fr; }
     .nav-links { display: none; }
   }
+    /* ---------- Pixie Guide Modal ---------- */
+    .pixie-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 12, 0.8);
+    backdrop-filter: blur(6px);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .pixie-overlay.active { display: flex; }
+
+  .pixie-card {
+    background: linear-gradient(160deg, #17172a, #0f0f1c);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 36px;
+    position: relative;
+    animation: pixiePop 0.35s ease;
+    box-shadow: 0 0 60px rgba(155, 92, 255, 0.25);
+  }
+  @keyframes pixiePop {
+    from { transform: scale(0.9) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .pixie-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .pixie-close:hover { background: rgba(255,77,216,0.2); }
+
+  .pixie-avatar {
+    font-size: 3rem;
+    margin-bottom: 8px;
+  }
+  .pixie-card h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .pixie-card .pixie-sub {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: 22px;
+  }
+  .pixie-role {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .pixie-role:last-of-type { border-bottom: none; }
+  .pixie-role-icon { font-size: 1.4rem; }
+  .pixie-role h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .pixie-role p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .pixie-cta {
+    margin-top: 24px;
+    width: 100%;
+    text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -392,7 +476,7 @@
     <h1 id="hero-heading">ENTER THE GAME</h1>
     <p class="subtitle">Challenge yourself. Compete with the best. Become legendary.</p>
     <div class="hero-actions">
-      <button class="btn btn-primary" onclick="alert('Loading GameZone...')">PLAY NOW</button>
+      <button class="btn btn-primary" onclick="openPixieModal()">PLAY NOW</button>
       <a href="#games" class="btn btn-secondary">EXPLORE GAMES</a>
     </div>
     <div class="hero-stats">
@@ -480,13 +564,59 @@
   <div class="tagline">Level up. Compete. Conquer.</div>
   <div class="copyright">© 2026 GameZone</div>
 </footer>
+<div class="pixie-overlay" id="pixieOverlay">
+  <div class="pixie-card">
+    <button class="pixie-close" onclick="closePixieModal()">✕</button>
+    <div class="pixie-avatar">🧚</div>
+    <h2>Zippy the Pixie has entered the chat</h2>
+    <p class="pixie-sub">Official (self-appointed) tour guide of the GameZone servers</p>
+
+    <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px;">
+      Welcome to Cyber Arena! Before you dive in, let me explain the neighborhood.
+      It's basically five people who've never met, screaming strategy at each other
+      in a language only they understand.
+    </p>
+
+    <div class="pixie-role">
+      <div class="pixie-role-icon">🛡️</div>
+      <div><h4>The Tank</h4><p>Stands in the front line and absorbs 90% of the blame, 10% of the damage.</p></div>
+    </div>
+    <div class="pixie-role">
+      <div class="pixie-role-icon">🏹</div>
+      <div><h4>The Sniper</h4><p>Camps in one corner the entire match, quietly questioning their life choices.</p></div>
+    </div>
+    <div class="pixie-role">
+      <div class="pixie-role-icon">💉</div>
+      <div><h4>The Healer</h4><p>Keeps everyone alive, gets blamed the moment someone dies anyway.</p></div>
+    </div>
+    <div class="pixie-role">
+      <div class="pixie-role-icon">⚡</div>
+      <div><h4>The Speedrunner</h4><p>Already at the final boss while you're still reading the tutorial.</p></div>
+    </div>
+    <div class="pixie-role">
+      <div class="pixie-role-icon">💬</div>
+      <div><h4>The Support</h4><p>Never lands a hit, but types "gg" faster than anyone in Cyber Arena history.</p></div>
+    </div>
+
+    <div class="pixie-cta">
+      <button class="btn btn-primary" style="width:100%;" onclick="closePixieModal()">Alright, let's go!</button>
+    </div>
+  </div>
+</div>
 
 <script>
   // Fetch backend status on load, just to prove Spring Boot is serving live data
+  function openPixieModal() {
+    document.getElementById('pixieOverlay').classList.add('active');
+  }
+  function closePixieModal() {
+    document.getElementById('pixieOverlay').classList.remove('active');
+  }
   fetch('/api/status')
     .then(res => res.json())
     .then(data => console.log('GameZone backend status:', data))
     .catch(err => console.log('Status check failed:', err));
+
 </script>
 
 </body>
