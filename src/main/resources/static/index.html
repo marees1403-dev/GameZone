@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMEZONE</title>
+<style>
+  :root {
+    --bg: #0a0a14;
+    --bg-panel: #12121f;
+    --purple: #9b5cff;
+    --blue: #4d7bff;
+    --pink: #ff4dd8;
+    --text: #e8e8f5;
+    --text-dim: #8a8aa3;
+    --border: rgba(155, 92, 255, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(155,92,255,0.12), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(77,123,255,0.10), transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(255,77,216,0.08), transparent 45%);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 20, 0.75);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+  .logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6ee787;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #6ee787;
+    box-shadow: 0 0 8px #6ee787;
+  }
+  .nav-toggle { display: none; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 90px 24px 70px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+    align-items: center;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--purple);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+    background: linear-gradient(100deg, #fff 40%, var(--purple) 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.subtitle {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    max-width: 460px;
+  }
+  .hero-actions { margin-top: 32px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+    color: #fff;
+    box-shadow: 0 0 24px rgba(155, 92, 255, 0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 32px rgba(255, 77, 216, 0.5); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--purple); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex;
+    gap: 28px;
+    margin-top: 40px;
+  }
+  .hero-stat .num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .hero-stat .label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .hero-visual {
+    position: relative;
+    height: 340px;
+    border-radius: 20px;
+    background: linear-gradient(160deg, rgba(155,92,255,0.18), rgba(77,123,255,0.12));
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero-visual::before, .hero-visual::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(10px);
+  }
+  .hero-visual::before {
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, var(--purple), transparent 70%);
+    top: -40px; left: -40px;
+    animation: float1 7s ease-in-out infinite;
+  }
+  .hero-visual::after {
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, var(--pink), transparent 70%);
+    bottom: -60px; right: -60px;
+    animation: float2 8s ease-in-out infinite;
+  }
+  @keyframes float1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(20px, 15px); } }
+  @keyframes float2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-15px, -20px); } }
+  .visual-core {
+    position: relative;
+    z-index: 2;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    background: rgba(255,255,255,0.03);
+  }
+
+  /* ---------- Section shared ---------- */
+  section { padding: 60px 24px; max-width: 1140px; margin: 0 auto; }
+  .section-head { margin-bottom: 32px; }
+  .section-head h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+  .section-head p { color: var(--text-dim); margin-top: 6px; }
+
+  /* ---------- Featured Game ---------- */
+  .featured-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+  }
+  .featured-visual {
+    background: linear-gradient(135deg, rgba(155,92,255,0.25), rgba(255,77,216,0.15));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    min-height: 260px;
+  }
+  .featured-info { padding: 40px; }
+  .featured-info .kicker {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--pink);
+    margin-bottom: 8px;
+  }
+  .featured-info h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
+  .featured-info p { color: var(--text-dim); margin-bottom: 20px; }
+  .players-online {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #6ee787;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  /* ---------- Stats ---------- */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--purple);
+    box-shadow: 0 8px 30px rgba(155, 92, 255, 0.2);
+  }
+  .stat-card .value {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--purple), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat-card .label {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  /* ---------- Modes ---------- */
+  .modes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .mode-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .mode-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(77, 123, 255, 0.18);
+  }
+  .mode-icon { font-size: 1.8rem; margin-bottom: 14px; }
+  .mode-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .mode-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; }
+  .mode-btn {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--purple);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ---------- Leaderboard ---------- */
+  .leaderboard {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .lb-row {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row.highlight {
+    background: linear-gradient(90deg, rgba(155,92,255,0.15), rgba(255,77,216,0.08));
+  }
+  .lb-rank {
+    width: 32px;
+    font-weight: 800;
+    color: var(--text-dim);
+  }
+  .lb-row.highlight .lb-rank { color: var(--pink); }
+  .lb-name { flex: 1; font-weight: 600; }
+  .lb-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--pink);
+    border: 1px solid var(--pink);
+    border-radius: 999px;
+    padding: 2px 10px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--text-dim);
+  }
+  footer .logo { font-size: 1.2rem; margin-bottom: 8px; }
+  footer .tagline { font-size: 0.9rem; margin-bottom: 16px; }
+  footer .copyright { font-size: 0.8rem; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding-top: 50px; }
+    .featured-card { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .modes-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">GAMEZONE</div>
+    <ul class="nav-links">
+      <li><a href="#home">HOME</a></li>
+      <li><a href="#games">GAMES</a></li>
+      <li><a href="#leaderboard">LEADERBOARD</a></li>
+      <li><a href="#profile">PROFILE</a></li>
+    </ul>
+    <div class="nav-status"><span class="dot"></span>ONLINE</div>
+  </div>
+</nav>
+
+<div class="hero" id="home">
+  <div>
+    <span class="hero-tag">SEASON 1 · LIVE NOW</span>
+    <h1 id="hero-heading">ENTER THE GAME</h1>
+    <p class="subtitle">Challenge yourself. Compete with the best. Become legendary.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="alert('Loading GameZone...')">PLAY NOW</button>
+      <a href="#games" class="btn btn-secondary">EXPLORE GAMES</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="level-value">LEVEL 42</div></div>
+      <div class="hero-stat"><div class="num">XP 78%</div></div>
+      <div class="hero-stat"><div class="num">RANK #07</div></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="visual-core">🎮</div>
+  </div>
+</div>
+
+<section id="games">
+  <div class="section-head">
+    <h2>FEATURED GAME</h2>
+  </div>
+  <div class="featured-card">
+    <div class="featured-visual">⚔️</div>
+    <div class="featured-info">
+      <div class="kicker">FEATURED</div>
+      <h3>CYBER ARENA</h3>
+      <p>Enter the ultimate cyber battlefield and dominate your opponents.</p>
+      <div class="players-online"><span class="dot"></span>PLAYERS ONLINE: 12,482</div>
+      <div>
+        <button class="btn btn-primary" onclick="alert('Launching Cyber Arena...')">PLAY GAME</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="profile">
+  <div class="section-head">
+    <h2>PLAYER STATISTICS</h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="value">128</div><div class="label">MATCHES</div></div>
+    <div class="stat-card"><div class="value">87</div><div class="label">VICTORIES</div></div>
+    <div class="stat-card"><div class="value">68%</div><div class="label">WIN RATE</div></div>
+    <div class="stat-card"><div class="value">07</div><div class="label">RANK</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>GAME MODES</h2>
+  </div>
+  <div class="modes-grid">
+    <div class="mode-card">
+      <div class="mode-icon">⚔️</div>
+      <h4>BATTLE ARENA</h4>
+      <p>Fast-paced team battles against players worldwide.</p>
+      <div class="mode-btn">PLAY MODE →</div>
+    </div>
+    <div class="mode-card">
+      <div class="mode-icon">🏆</div>
+      <h4>RANKED MODE</h4>
+      <p>Climb the ladder and prove you belong at the top.</p>
+      <div class="mode-btn">PLAY MODE →</div>
+    </div>
+    <div class="mode-card">
+      <div class="mode-icon">👑</div>
+      <h4>CHAMPIONSHIP</h4>
+      <p>Compete in seasonal tournaments for exclusive rewards.</p>
+      <div class="mode-btn">PLAY MODE →</div>
+    </div>
+  </div>
+</section>
+
+<section id="leaderboard">
+  <div class="section-head">
+    <h2>LEADERBOARD</h2>
+  </div>
+  <div class="leaderboard">
+    <div class="lb-row"><div class="lb-rank">1</div><div class="lb-name">ShadowX</div></div>
+    <div class="lb-row"><div class="lb-rank">2</div><div class="lb-name">CyberWolf</div></div>
+    <div class="lb-row highlight"><div class="lb-rank">3</div><div class="lb-name">Nova</div><div class="lb-badge">YOU</div></div>
+    <div class="lb-row"><div class="lb-rank">4</div><div class="lb-name">Phantom</div></div>
+    <div class="lb-row"><div class="lb-rank">5</div><div class="lb-name">Dragon</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">GAMEZONE</div>
+  <div class="tagline">Level up. Compete. Conquer.</div>
+  <div class="copyright">© 2026 GameZone</div>
+</footer>
+
+<script>
+  // Fetch backend status on load, just to prove Spring Boot is serving live data
+  fetch('/api/status')
+    .then(res => res.json())
+    .then(data => console.log('GameZone backend status:', data))
+    .catch(err => console.log('Status check failed:', err));
+</script>
+
+</body>
+</html>
